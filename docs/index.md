@@ -303,7 +303,7 @@ Now let's try to run the assembly for a simple C function on the simple
 processor and start to look at its performance. Write out the TinyRV2
 assembly code that implements this C function:
 
-    int accum( int* a, int n )
+    int accumulate( int* a, int n )
     {
       int sum = 0;
       for ( int i = 0; i < n; i++ ) {
@@ -315,11 +315,11 @@ assembly code that implements this C function:
 
 You should only use the instructions we have implemented in the simple
 processor (ADD, ADDI, LW, BNE). Once you have the assembly, add it to the
-`lab2_proc/test/simple_accum_test.py` test script. Then try running the
+`lab2_proc/test/simple_accumulate_test.py` test script. Then try running the
 program on both `ProcFL` and `ProcSimple` like this:
 
     % cd $TOPDIR/build
-    % pytest ../lab2_proc/test/simple_accum_test.py -v
+    % pytest ../lab2_proc/test/simple_accumulate_test.py -v
 
 Take a look at the line trace to estimate the number of cycles per
 iteration.
