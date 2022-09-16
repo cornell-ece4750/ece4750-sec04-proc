@@ -1,5 +1,5 @@
 #=========================================================================
-# ProcSimple_accum_test.py
+# simple_accum_test.py
 #=========================================================================
 
 import pytest
@@ -7,6 +7,7 @@ import random
 
 from pymtl3 import *
 from .harness import *
+from lab2_proc.ProcFL import ProcFL
 from lab2_proc.ProcSimple import ProcSimple
 
 def test_accum( cmdline_opts ):
@@ -18,13 +19,7 @@ def test_accum( cmdline_opts ):
 
     # write your assembly implementation of the accum function here!
 
-    addi x10, x0, 0     # int sum = 0;
-  loop:                 # for ( int i = 0; i < n; i++ ) {
-    lw   x5,  0(x11)    #   int b = a[i];
-    add  x10, x10, x5   #   sum   = sum + b;
-    addi x11, x11, 4    #   // pointer bump
-    addi x12, x12, -1   #   // decrement loop counter
-    bne  x12, x0, loop  # }
+
 
     # put the final result in x10 so the following instruction can send
     # this result to be checked by the stream sink
@@ -42,5 +37,5 @@ def test_accum( cmdline_opts ):
     .word 21
   """
 
-  run_test( ProcSimple, prog, cmdline_opts=cmdline_opts )
+  run_test( ProcFL, prog, cmdline_opts=cmdline_opts )
 

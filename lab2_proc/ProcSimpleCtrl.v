@@ -343,14 +343,6 @@ module lab2_proc_ProcSimpleCtrl
       `TINYRV2_INST_CSRR    :cs( y, br_na,  imm_i, n, bm_csr, n, alu_cp1, nr, wm_a, y,  y,   n    );
       `TINYRV2_INST_CSRW    :cs( y, br_na,  imm_i, y, bm_rf,  n, alu_cp0, nr, wm_a, n,  n,   y    );
 
-      //''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''
-      // Add more instructions to the control signal table
-      //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''\/
-
-      `TINYRV2_INST_ADDI    :cs( y, br_na, imm_i, y, bm_imm,  n, alu_add, nr, wm_a, y,  n,   n    );
-
-      //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/\
-
       default              :cs( n, br_x,  imm_x, n, bm_x,    n, alu_x,   nr, wm_x, n,  n,   n    );
 
     endcase
