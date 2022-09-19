@@ -261,9 +261,53 @@ Use the given handout to plan your implementation. Make sure you
 understand how the control signals are set for the ADD instruction. Draw
 any modifications you need to the datapath, add any control signals you
 need to the control signal table, and then fill out the row in the
-control signal table for the ADDI instruction. Once you have the control
-signal table filled out on paper, go ahead and add a new row to the
-control signal table in `lab2_proc/ProcSimpleCtrl.v`:
+control signal table for the ADDI instruction. Here are the explanations
+of each control signal:
+
+ - `val` : whether or not the instruction is valid; should be
+   `y` for all instructions; basically a way to determine if this is a
+   valid instruction or not for debugging purposes
+
+ - `br type` : is either `br_na` if this is not a branch or `br_bne` if
+   this is a BNE operation
+
+ - `imm type` : immediate format corresponding to the TinyRV2 instruction
+   set manual. `imm_i` is for I-type immediate format and `imm_b` is for
+   B-type immediate format
+
+ - `rs1 en` : set to `n` if this instruction _does not_ use the `rs1`
+   field and set to `y` if this instruction _does_ use the `rs1` field;
+   used for dependency checking
+
+ - `op2 muxsel` : mux select control signal for the op2 mux; use `bm_rf`
+   to choose the value from the register file, use `bm_imm` to choose the
+   value from the immediate generation unit, use `csr` to choose the
+   value from the CSR mux
+
+ - `rs2 en` : set to `n` if this instruction _does not_ use the `rs2`
+   field and set to `y` if this instruction _does_ use the `rs2` field;
+   used for dependency checking
+
+ - `alu fn` : ALU function control signal; use `alu_add` for the ALU to
+   do an add; use `alu_cp0` for the ALU to copy op0 to the output; use
+   `alu_cp1` for the ALU to copy op1 to the output
+
+ - `dmm type` : the type of data memory operation; use `nr` if this
+   is not a memory request; use `ld` if this is a load
+
+ - `wbmux sel` : mux select control signal for writeback mux; use `wm_a`
+   to choose the value from the ALU; use `wm_m` to choose the value from
+   the data memory
+
+ - `rf wen` : register file write enable; set to `n` if this instruction
+   _does not_ need to write the register file; set to `y` if this
+   instruction _does_ need to write the register file
+
+ - `csrr`/`csrw` : whether this is a CSRR or CSRW instruction
+
+Once you have the control signal table filled out on paper, go ahead and
+add a new row to the control signal table in
+`lab2_proc/ProcSimpleCtrl.v`:
 
     always_comb begin
       casez ( inst_D )
