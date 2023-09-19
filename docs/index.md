@@ -32,12 +32,24 @@ is Verilator itself (and, of course, its own prerequisites). The [official
 Verilator documentation](https://verilator.org/guide/latest/install.html) 
 provides instructions on how it can be installed on all platforms, including a 
 Windows version. However, to further simplify things, we recommend Windows users 
-set up a virtual machine or the WSL following 
+set up a virtual machine, or the WSL following 
 [this guide](https://learn.microsoft.com/en-us/windows/wsl/install). That way,
 we can assume that everyone in this class has a Unix-like setup with mostly
 the same commands (e.g. an underlying Linux distro or macOS.)
 
+For a performance boost, we first recommend installing `Ccache`, a compiler cache
+that will prevent redundant compilations of unchanged code, and `mold (sold)`, a fast
+linker:
 
+    % sudo apt-get install ccache mold # If on Linux with APT
+    % brew install ccache mold # If on macOS with Homebrew
+
+Verilator and all its dependencies can then be installed as follows:
+
+    % sudo apt-get install verilator # Assuming Ubuntu
+    % brew install verilator
+
+Lastly,
 
 TinyRV2 Processor Walk-Through
 --------------------------------------------------------------------------
