@@ -8,6 +8,7 @@ ECE 4750 Section 4 and 5: Lab 2 Head Start
 
 **Table of Contents**
 
+ - Replicating our setup locally
  - TinyRV2 Processor Walk-Through
  - Testing the ADD Instruction
  - Implementing and Testing the ADDI Instruction
@@ -15,17 +16,28 @@ ECE 4750 Section 4 and 5: Lab 2 Head Start
 
 This discussion section serves to introduce students to the basic
 processor modeling approach and testing strategy we will be using to
-implement a pipelined TinyRV2 processor in lab 2. You should log into the
-`ecelinux` servers using the remote access option of your choice and then
-source the setup script.
+implement a pipelined TinyRV2 processor in lab 2. 
 
-    % source setup-ece4750.sh
-    % mkdir -p $HOME/ece4750
-    % cd $HOME/ece4750
-    % git clone git@github.com:cornell-ece4750/ece4750-sec04-proc sec04
-    % cd sec04
-    % TOPDIR=$PWD
-    % mkdir $TOPDIR/build
+Replicating our setup locally
+--------------------------------------------------------------------------
+
+Before we start, many people have been asking how to replicate our setup
+for this class "at home." As the complexity of the designs is increasing,
+we have deemed it particularly important to take a look at how that's done.
+Running locally can be faster than using our shared `ecelinux` infrastructure.
+
+Fortunately, our current setup is quite barebones, as this year we focused on
+streamlining. In fact, as we discussed in Section 2, our only actual dependency
+is Verilator itself (and, of course, its own prerequisites). The [official
+Verilator documentation](https://verilator.org/guide/latest/install.html) 
+provides instructions on how it can be installed on all platforms, including a 
+Windows version. However, to further simplify things, we recommend Windows users 
+set up a virtual machine or the WSL following 
+[this guide](https://learn.microsoft.com/en-us/windows/wsl/install). That way,
+we can assume that everyone in this class has a Unix-like setup with mostly
+the same commands (e.g. an underlying Linux distro or macOS.)
+
+
 
 TinyRV2 Processor Walk-Through
 --------------------------------------------------------------------------
