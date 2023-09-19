@@ -1,9 +1,10 @@
 
-ECE 4750 Section 4: Lab 2 Head Start
+ECE 4750 Section 4 and 5: Lab 2 Head Start
 ==========================================================================
 
- - Author: Christopher Batten
- - Date: September 16, 2022
+ - Author: Cecilio C. Tamarit
+ - Date: September 19, 2023
+ - Based on previous material from Christopher Batten
 
 **Table of Contents**
 
