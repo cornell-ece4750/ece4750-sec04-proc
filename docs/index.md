@@ -41,15 +41,42 @@ For a performance boost, we first recommend installing `Ccache`, a compiler cach
 that will prevent redundant compilations of unchanged code, and `mold (sold)`, a fast
 linker:
 
-    % sudo apt-get install ccache mold # If on Linux with APT
-    % brew install ccache mold # If on macOS with Homebrew
+    % sudo apt-get install ccache mold  # If on Linux with APT
+    % brew install ccache mold          # If on macOS with Homebrew
 
 Verilator and all its dependencies can then be installed as follows:
 
-    % sudo apt-get install verilator # Assuming Ubuntu
+    % sudo apt-get install verilator    # Assuming Ubuntu
     % brew install verilator
 
-Lastly,
+Alternatively, Docker fans may resort to 
+[the official container](https://hub.docker.com/repository/docker/verilator/verilator-buildenv).
+
+
+For waveform visualization, you may resort to either:
+
+1. GTKWave, which can be obtained [here](https://gtkwave.sourceforge.net/) and will open FST, VCD, and other formats.
+2. The Visual Studio Code + [Plug-in](https://marketplace.visualstudio.com/items?itemName=wavetrace.wavetrace) approach we suggested in Section 3, which also works locally.
+
+To generate coverage reports, you have to make sure lcov is installed:
+
+    % sudo apt-get install lcov
+    % brew install lcov
+
+This will allow you to run the commands in the Makefile we provide, which naturally depends on GNU Make,
+which is most likely already installed in your Linux distro / WSL / macOS, but just in case:
+
+    % sudo apt-get install build-essential    # If on Linux with APT
+    % brew install make                       # If on macOS with Homebrew
+
+Of course, making use of our Makefiles requires setting the paths to where your
+local Verilator and compiler binaries are located. You can hardcode them by editing
+the Makefile or setting the environment variables so that:
+
+    VERILATOR_ROOT = /path/to/your/bin/verilator
+    VERILATOR_COVERAGE = /path/to/your/bin/verilator_coverage
+    CC = /path/to/your/bin/gcc
+    CXX = /path/to/your/bin/g++
 
 TinyRV2 Processor Walk-Through
 --------------------------------------------------------------------------
