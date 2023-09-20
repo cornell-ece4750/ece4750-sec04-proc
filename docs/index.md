@@ -63,8 +63,11 @@ To generate coverage reports, you have to make sure lcov is installed:
     % sudo apt-get install lcov               # If on Linux with APT
     % brew install lcov                       # If on macOS with Homebrew
 
-This will allow you to run the commands in the Makefile we provide, which naturally depends on GNU Make,
-which is most likely already installed in your Linux distro / WSL / macOS, but just in case:
+### Time to test that Makefile
+
+The previous steps will allow you to run the commands in the Makefile we provide with each lab, 
+which naturally depends on GNU Make, which is most likely already installed in your Linux distro 
+/ WSL / macOS, but just in case:
 
     % sudo apt-get install build-essential    # If on Linux with APT
     % brew install make                       # If on macOS with Homebrew
@@ -77,6 +80,7 @@ the Makefile or setting the environment variables (`export VAR = value`) so that
     VERILATOR_COVERAGE = /path/to/your/bin/verilator_coverage
     CC = /path/to/your/bin/gcc
     CXX = /path/to/your/bin/g++
+
 
 TinyRV2 Processor Walk-Through
 --------------------------------------------------------------------------
