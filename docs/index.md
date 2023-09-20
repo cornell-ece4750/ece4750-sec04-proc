@@ -46,8 +46,8 @@ linker:
 
 Verilator and all its dependencies can then be installed as follows:
 
-    % sudo apt-get install verilator    # Assuming Ubuntu
-    % brew install verilator
+    % sudo apt-get install verilator    # If on Linux with APT
+    % brew install verilator            # If on macOS with Homebrew
 
 Alternatively, Docker fans may resort to 
 [the official container](https://hub.docker.com/repository/docker/verilator/verilator-buildenv).
@@ -60,8 +60,8 @@ For waveform visualization, you may resort to either:
 
 To generate coverage reports, you have to make sure lcov is installed:
 
-    % sudo apt-get install lcov
-    % brew install lcov
+    % sudo apt-get install lcov               # If on Linux with APT
+    % brew install lcov                       # If on macOS with Homebrew
 
 This will allow you to run the commands in the Makefile we provide, which naturally depends on GNU Make,
 which is most likely already installed in your Linux distro / WSL / macOS, but just in case:
@@ -71,7 +71,7 @@ which is most likely already installed in your Linux distro / WSL / macOS, but j
 
 Of course, making use of our Makefiles requires setting the paths to where your
 local Verilator and compiler binaries are located. You can hardcode them by editing
-the Makefile or setting the environment variables so that:
+the Makefile or setting the environment variables (`export VAR = value`) so that:
 
     VERILATOR_ROOT = /path/to/your/bin/verilator
     VERILATOR_COVERAGE = /path/to/your/bin/verilator_coverage
