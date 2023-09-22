@@ -96,60 +96,7 @@ latency-insensitive val/rdy micro-protocol.
 
 We provide students with a complete functional-level model of a processor that
 implements the above interface and can be used as a reference. You can
-find the FL model in `lab2_proc/ProcFLMultiCycle.v`. This is what the interface
-looks like in Verilog for an RTL implementation of the TinyRV2 processor.
-
-    module lab2_proc_ProcSimple
-    #(
-      parameter p_num_cores = 1
-    )
-    (
-      input  logic         clk,
-      input  logic         reset,
-
-      // From mngr streaming port
-
-      input  logic [31:0]  mngr2proc_msg,
-      input  logic         mngr2proc_val,
-      output logic         mngr2proc_rdy,
-
-      // To mngr streaming port
-
-      output logic [31:0]  proc2mngr_msg,
-      output logic         proc2mngr_val,
-      input  logic         proc2mngr_rdy,
-
-      // Instruction Memory Request Port
-
-      output mem_req_4B_t  imem_reqstream_msg,
-      output logic         imem_reqstream_val,
-      input  logic         imem_reqstream_rdy,
-
-      // Instruction Memory Response Port
-
-      input  mem_resp_4B_t imem_respstream_msg,
-      input  logic         imem_respstream_val,
-      output logic         imem_respstream_rdy,
-
-      // Data Memory Request Port
-
-      output mem_req_4B_t  dmem_reqstream_msg,
-      output logic         dmem_reqstream_val,
-      input  logic         dmem_reqstream_rdy,
-
-      // Data Memory Response Port
-
-      input  mem_resp_4B_t dmem_respstream_msg,
-      input  logic         dmem_respstream_val,
-      output logic         dmem_respstream_rdy,
-
-      // extra ports
-
-      input  logic [31:0]  core_id,
-      output logic         commit_inst,
-      output logic         stats_en
-
-    );
+find the FL model in `lab2_proc/ProcFLMultiCycle.v`. 
 
 Notice there are some extra ports to set the core id and for statistics,
 and that we are using SystemVerilog structs to encode the memory requests
@@ -187,7 +134,7 @@ The datapath for this simple processor is shown below.
 
 ![](assets/fig/lab2-proc-simple-dpath-tinyrv2.png)
 
-Your task in the first part of Lab 2 support the entire TinyRV2 ISA
+Your task in the first part of Lab 2 is to support the entire TinyRV2 ISA
 in this baseline processor.
 
 Testing the ADD Instruction
@@ -292,9 +239,7 @@ The linetrace should look something like this:
     31: .        >  0000026c|nop                    |nop |nop |nop |[ ]rd:00:00000270:0:        >rd:00:0:0:00000013[ *]| >
     32: .        >  00000270|nop                    |nop |nop |nop |[ ]rd:00:00000274:0:        >rd:00:0:0:fc0020f3[ *]| >
 
-Now add a new test function to `lab2_proc/test/simple_add_test.py` named
-`test_add_lg` which is similar to `test_add_sm` but uses two larger input
-values. Verify your test passes on both `ProcFL` and `ProcSimple`.
+
 
 Implementing and Testing the ADDI Instruction
 --------------------------------------------------------------------------
@@ -355,7 +300,7 @@ of each control signal:
 
 Once you have the control signal table filled out on paper, go ahead and
 add a new row to the control signal table in
-`lab2_proc/ProcSimpleCtrl.v`:
+`lab2_proc/ProcBaseCtrl.v`:
 
     always_comb begin
       casez ( inst_D )
@@ -370,23 +315,15 @@ add a new row to the control signal table in
       endcase
     end
 
-Create a new test case in `lab2_proc/test/simple_addi_test.py` similar in
+We can use the test asm file in `lab2_proc/asm/addi.asm` similar in
 spirit to the test cases we used to test the ADD instruction. Then run
-your test case on both `ProcFL` and `ProcSimple`. Look at the line trace
-to confirm your test case is doing what you expect on `ProcSimple`.
+the test case on both `ProcFL` and `ProcBase`. Look at the final diff
+output to confirm your test case is doing what you expect on `ProcBase`.
 
-    % cd $TOPDIR/build
-    % pytest ../lab2_proc/test/simple_addi_test.py -v
+    % cd $TOPDIR/lab2_proc
+    % make addi.hex
+    % make addi.hex.diff DESIGN=ProcBase
 
-Writing assembly test cases can be very tedious. We can use the Python to
-help automate the process of _generating_ test cases. You can see an
-example of functions that generate assembly test programs in
-`inst_add.py` and then you can see using these test programs in
-`ProcSimple_test.py`. Go ahead and run all of the provided tests on
-`ProcFL` and `ProcSimple` like this:
-
-    % cd $TOPDIR/build
-    % pytest ../lab2_proc/test -v
 
 Evaluating an Accumulate Function
 --------------------------------------------------------------------------
@@ -406,12 +343,13 @@ assembly code that implements this C function:
     }
 
 You should only use the instructions we have implemented in the simple
-processor (ADD, ADDI, LW, BNE). Once you have the assembly, add it to the
-`lab2_proc/test/simple_accumulate_test.py` test script. Then try running the
-program on both `ProcFL` and `ProcSimple` like this:
+processor (ADD, ADDI, LW, BNE). Once you have the assembly, save it to the
+`lab2_proc/asm` folder. Then try running the program on both `ProcFL` and 
+`ProcBase` like this:
 
     % cd $TOPDIR/build
-    % pytest ../lab2_proc/test/simple_accumulate_test.py -v
+    % make accum.hex
+    % amke accum.hex.diff DESIGN=ProcBase
 
 Take a look at the line trace to estimate the number of cycles per
 iteration.
