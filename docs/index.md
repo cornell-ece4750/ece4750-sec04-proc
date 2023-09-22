@@ -73,8 +73,9 @@ which naturally depends on GNU Make, which is most likely already installed in y
     % brew install make                       # If on macOS with Homebrew
 
 Of course, making use of our Makefiles requires setting the paths to where your
-local Verilator and compiler binaries are located. You can hardcode them by editing
-the Makefile or setting the environment variables (`export VAR = value`) so that:
+local Verilator and compiler binaries are located. If the default ones don't work,
+you can hardcode them by editing the Makefile or setting the environment variables 
+(`export VAR = value`) so that:
 
     VERILATOR_ROOT = /path/to/your/bin/verilator
     VERILATOR_COVERAGE = /path/to/your/bin/verilator_coverage
