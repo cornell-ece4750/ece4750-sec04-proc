@@ -87,17 +87,17 @@ TinyRV2 Processor Walk-Through
 --------------------------------------------------------------------------
 
 The following figure shows the high-level interface for our TinyRV2
-processor. The procesor has an independent instruction memory and data
+processor. The processor has an independent instruction memory and data
 memory interface along with a mngr2proc and proc2mngr stream interface
 for testing purposes. All interfaces are implemented using the
 latency-insensitive val/rdy micro-protocol.
 
 ![](assets/fig/lab2-proc-ifc.png)
 
-We provide students a complete functional-level model of a processor that
+We provide students with a complete functional-level model of a processor that
 implements the above interface and can be used as a reference. You can
-find the FL model in `lab2_proc/ProcFL.py`. This is what the interface
-looks like in Verilog for an RTL implementation of the TinyRV2 process.
+find the FL model in `lab2_proc/ProcFLMultiCycle.v`. This is what the interface
+looks like in Verilog for an RTL implementation of the TinyRV2 processor.
 
     module lab2_proc_ProcSimple
     #(
@@ -176,7 +176,7 @@ The full TinyRV2 instruction set includes the following instructions:
  - Jump: `jal, jalr`
  - Branch: `bne, beq, blt, bltu, bge, bgeu`
 
-In this discussion section, we provide you a simple processor
+In this discussion section, we provide you with a baseline processor
 implementation that implements ADD, LW, BNE, CSRR, and CSRW. The block
 diagram for how the control unit and datapath unit are composed is shown
 below.
@@ -187,60 +187,51 @@ The datapath for this simple processor is shown below.
 
 ![](assets/fig/lab2-proc-simple-dpath-tinyrv2.png)
 
-Take a look at the code in the following files to learn more about how
-the simple processor is implemented.
-
- - `lab2_proc/ProcSimpleDpath.v`
- - `lab2_proc/ProcSimpleCtrl.v`
- - `lab2_proc/ProcSimple.v`
+Your task in the first part of Lab 2 support the entire TinyRV2 ISA
+in this baseline processor.
 
 Testing the ADD Instruction
 --------------------------------------------------------------------------
 
-Let's take a look at a basic test for the ADD instruction. They primary
+Let's take a look at a basic test for the ADD instruction. The primary
 way we will test our processors is by writing very small _assembly test
-programs_. Take a look at the test in
-`lab2_proc/test/simple_add_test.py` to see how to write such assembly
-test programs.
+programs_. Take a look at the test in `lab2_proc/ams/add_alt.asm` to see how 
+to write such assembly test programs.
 
-    def test_add_sm( cmdline_opts ):
+    #---------------------------------------
+    # sample asm file for tutorial
+    #---------------------------------------
+    
+    csrr x1, mngr2proc < 5
+    csrr x2, mngr2proc < 4
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    add x3, x1, x2
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    csrw proc2mngr, x3 > 9
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
 
-      prog="""
-        csrr x1, mngr2proc < 5
-        csrr x2, mngr2proc < 4
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        add x3, x1, x2
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        csrw proc2mngr, x3 > 9
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-      """
-
-      run_test( ProcSimple, prog, cmdline_opts=cmdline_opts )
-
-Our assembly test program is just a multiline string with one assembly
-instruction per line, which we can then pass in to the `run_test` helper
-function. There are two special control status registers (CSR) that we
+There are two special control status registers (CSR) that we
 will use extensively in testing. If we read the `mngr2proc` CSR using a
 CSRR instruction, then this deques a message from the `mngr2proc` stream
 interface (the message comes from the stream source) and writes it to the
@@ -253,20 +244,20 @@ source to send to the processor for that instruction, and we can use the
 sink to check for that instruction.
 
 You should always make sure your tests pass on the FL model before using
-them to test your RTL model. Let's run the above test on our FL model.
+them to test your baseline and alternative models. 
+Let's run the above test on our FL model.
 
-    % cd $TOPDIR/build
-    % pytest ../lab2_proc/test/simple_add_test.py -s
+    % cd $TOPDIR/lab2_proc
+    % make add.hex
+    % make add.hex.sim DESIGN=ProcFLMultiCycle RUN_ARG=--trace
 
-Use the `-s` command line option so you can see the linetrace. Verify
+Use the `--trace` argument so you can see the linetrace. Verify
 that the instructions you think should be executing are indeed executing
-on the FL model. Now let's try the same test on the simple processor.
-Modify `run_test` to use the `ProcSimple` like this:
+on the FL model. Now, let's try the same test on the baseline processor:
 
-  run_test( ProcSimple, prog, cmdline_opts=cmdline_opts )
+    % make add.hex.sim DESIGN=ProcBaseline RUN_ARG=--trace
 
-Then rerun the test and look at the line trace. It should look something
-like this:
+The linetrace should look something like this:
 
      1r .        >          |                       |    |    |    |[ ]                         >                  [  ]| >
      2r .        >          |                       |    |    |    |[ ]                         >                  [  ]| >
